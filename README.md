@@ -54,4 +54,6 @@ The artist will document and prove that the funds were allocated correctly.
 
 The goal of this platform is to empower artists while allowing for them to have a greater sense of connectivity with their fans.
 
-Artists benefit from having an additional means to fund their projects besides funding it themselves and traditional
+Artists benefit from having an additional means to fund their projects besides funding it themselves or traditional funding methods with traditional strings attached.
+
+Fans benefit from having a direct connection with the artists that they follow and for the first time in history being able to contribute to their favorite artists' work.

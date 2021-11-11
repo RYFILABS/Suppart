@@ -21,9 +21,13 @@ So he posts his project and intentions on Suppart, listing a $10,000 goal to get
 He lists 5 donation tiers:
 
 Tier 1 - $20 - donor will receive a signed t-shirt from the artist specific to the music video.
+
 Tier 2 - $50 - donor will receive a unique "thank you video" from the artist and a signed t-shirt.
+
 Tier 3 - $100 - donor will receive an Instagram shoutout from the artist.
+
 Tier 4 - $500 - donor will receive an exlusive 1 of 10 NFT of a clip from the music video and have their name in the video credits.
+
 Tier 5 - $1000 - donor will receive an exclusive 1 of 1 NFT of the full music video, get flown out to be in the video with the artist, and have their name in the credits.
 
 All transactions on the platform will take place on a blockchain network, The Suppart Network.

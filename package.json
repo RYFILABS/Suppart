@@ -1,0 +1,26 @@
+{
+  "name": "suppart",
+  "version": "1.0.0",
+  "description": "# Project intention:",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/weiermedia/suppart.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/weiermedia/suppart/issues"
+  },
+  "homepage": "https://github.com/weiermedia/suppart#readme",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.3.3"
+  }
+}

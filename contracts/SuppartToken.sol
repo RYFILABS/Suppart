@@ -1,10 +1,15 @@
-pragma solidity ^0.5.0;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.1;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/token/ERC20/ERC20.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/token/ERC20/ERC20Detailed.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract SuppartToken is ERC20, ERC20Detailed {
+contract SuppartToken is ERC20 {
     
+    modifier onlyOwner {
+        require(msg.sender == owner, "You do not have permission to mint these tokens!");
+        _;
+    }
+
     event TokenBuyEvent (
         address from,
         address to,
@@ -30,24 +35,18 @@ contract SuppartToken is ERC20, ERC20Detailed {
     mapping(address => AddressFunding[]) AddressProjects;
     Project[] ProjectTotals;
     
-    address private owner;
+    address payable owner;
     mapping (address => uint256) pendingWithdrawals;
     
-    constructor(
-        string memory name,
-        string memory symbol,
-        uint256 initialSupply
-    )
-        ERC20Detailed(name, symbol, 18)
-        public
-    {
-        _mint(msg.sender, initialSupply);
-        owner = msg.sender;
+
+    constructor(uint256 _initialSupply) ERC20("SuppartToken", "SART" ) {
+        _mint(msg.sender, _initialSupply);
+        owner = payable(msg.sender);
     }
-    
+
     function buyToken(string calldata _projectName, uint256 _amount) external payable {
         
-        require(_amount == ((msg.value / 1 ether)), "Incorrect amount of Eth.");
+        require(_amount > 0, "Incorrect amount, must be a positive amount.");
         //require(_projectName, "You must provide a project_name");
         
         bool foundproject;
@@ -100,7 +99,7 @@ contract SuppartToken is ERC20, ERC20Detailed {
         uint256 amount = pendingWithdrawals[msg.sender];
         // Pending refund zerod before to prevent re-entrancy attacks
         pendingWithdrawals[msg.sender] = 0;
-        msg.sender.transfer(amount * 1 ether);
+        payable(msg.sender).transfer(amount);
     }
     
     function createSupportProject(string memory _projectName) public returns(bool result, uint id){ 
@@ -129,5 +128,8 @@ contract SuppartToken is ERC20, ERC20Detailed {
         return (false, 0);
     }
     
-}
+    function mint(address recipient, uint amount) public onlyOwner {
+        _mint(recipient, amount);
+    }
 
+}

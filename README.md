@@ -4,7 +4,7 @@
 
 To create a platform that allows for artists to have control of their projects and careers.
 
-This is achieved through a crowdfunding model; artists can post projects of theirs which they want to get funded and ask for donations from from their fans/followers.
+This is achieved through a crowdfunding model; artists can post projects of theirs which they want to get funded and ask for donations from their fans/followers.
 
 Similar to other crowdfunding platforms, the project owner will set a funding goal for the project and in turn offer incentives for different donation tiers.
 

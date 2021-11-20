@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import './App.css';
 import { ethers } from "ethers";
-import PreciousChickenToken from "./contracts/SuppartToken.json";
+import SuppartToken from "./contracts/SuppartToken.json";
 import { Button, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Needs to change to reflect current SuppartToken address
-const contractAddress ='0x8C4771854402291DD44a9cB82128309e11d814Fa';
+const contractAddress ='0x1715cFb28Dfb500cC985D8c285A8AcC05A9aEF8D';
 
 let provider;
 let signer;
@@ -21,7 +21,7 @@ if (typeof window.ethereum !== 'undefined' || (typeof window.web3 !== 'undefined
 			provider = new ethers.providers.Web3Provider(window.ethereum)
 		);
 		signer = provider.getSigner();
-		erc20 = new ethers.Contract(contractAddress, PreciousChickenToken.abi, signer);
+		erc20 = new ethers.Contract(contractAddress, SuppartToken.abi, signer);
 		noProviderAbort = false;
 	} catch(e) {
 		noProviderAbort = true;
@@ -30,10 +30,17 @@ if (typeof window.ethereum !== 'undefined' || (typeof window.web3 !== 'undefined
 
 function App() {
 	const [walAddress, setWalAddress] = useState('0x00');
-	const [pctBal, setPctBal] = useState(0);
+	const [sartBal, setSartBal] = useState(0);
 	const [ethBal, setEthBal] = useState(0);
+
+  const [inputs, setInputs] = React.useState({
+    buysart: "",
+    buysartProject: ""
+  });
+
 	const [coinSymbol, setCoinSymbol] = useState("Nil");
 	const [transAmount, setTransAmount] = useState('0');
+  //const [projectName, setProjectName] = useState("Nil");
 	const [pendingFrom, setPendingFrom] = useState('0x00');
 	const [pendingTo, setPendingTo] = useState('0x00');
 	const [pendingAmount, setPendingAmount] = useState('0');
@@ -75,12 +82,12 @@ function App() {
 		);
 	};
 
-	// Sets current balance of PCT for user
+	// Sets current balance of SART for user
 	signer.getAddress().then(response => {
 		setWalAddress(response);
 		return erc20.balanceOf(response);
 	}).then(balance => {
-		setPctBal(balance.toString())
+		setSartBal(balance.toString())
 	});
 
 	// Sets current balance of Eth for user
@@ -100,11 +107,19 @@ function App() {
 	symbol.then(x => setCoinSymbol(x.toString()));
 
 	// Interacts with smart contract to buy PCT
-	async function buyPCT() {
+	async function buySART() {
 		// Converts integer as Eth to Wei,
-		let amount = await ethers.utils.parseEther(transAmount.toString());
+		let amount = await ethers.utils.parseEther(inputs.buysart.toString());
+    let project = inputs.buysartProject;
+
+    console.log('inside buySART');
+    console.log('amount: ' + amount);
+    console.log('project: ' + project);
+
 		try {
-			await erc20.buyToken(transAmount, {value: amount});
+      await erc20.buyToken(transAmount, {value: amount});
+
+			//await erc20.buyToken(transAmount, {value: amount}, {value: project});
 			// Listens for event on blockchain
 			await erc20.on("TokenBuyEvent", (from, to, amount) => {
 				setPendingFrom(from.toString());
@@ -142,16 +157,37 @@ function App() {
 	// Sets state for value to be transacted
 	// Clears extant alerts
 	function valueChange(value) {
+
+    console.log('called valueChange: ' + value);
+
 		setTransAmount(value);
 		setIsPending(false);
 		setIsError(false);
 	}
 
+  function handleChange(evt) {
+    const value = evt.target.value;
+    const name = evt.target.name;
+
+    console.log(value);
+    console.log(name);
+
+    if(name === 'buysart')
+    {
+      setTransAmount(value);
+    }
+
+    setInputs({
+      ...inputs,
+      [evt.target.name]: value
+    });
+  }
+
 	// Handles user buy form submit
 	const handleBuySubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		valueChange(e.target.buypct.value);
-		buyPCT();
+		valueChange(e.target.buysart.value);
+		buySART();
 	};
 
 	// Handles user sell form submit
@@ -169,28 +205,29 @@ function App() {
 		<PendingAlert />
 
 		<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/512px-Ethereum-icon-purple.svg.png" className="App-logo" alt="Ethereum logo" />
+    <img src="/images/Suppart.gif" className="App-logo-token" alt="Suppart logo" width="500" height="300" />
 
 		<h2>{coinSymbol}</h2>
 
 		<p>
 		User Wallet address: {walAddress}<br/>
 		Eth held: {ethBal}<br />
-		PCT held: {pctBal}<br />
+		SART held: {sartBal}<br />
 		</p>
 
 		<form onSubmit={handleBuySubmit}>
 		<p>
-		<label htmlFor="buypct">PCT to buy:</label>
-		<input type="number" step="1" min="0" id="buypct" 
-		name="buypct" onChange={e => valueChange(e.target.value)} required 
-		style={{margin:'12px'}}/>	
-		<Button type="submit" >Buy PCT</Button>
+		<label htmlFor="buysart">SART to buy:</label>
+		<input type="number" step="1" min="0" id="buysart" name="buysart" onChange={handleChange} required style={{margin:'12px'}}/>	
+    <label htmlFor="buysartProject">Project Name:</label>
+    <input type="text" step="2" id="buysartProject" name="buysartProject" onChange={handleChange} required style={{margin:'12px'}}/>
+		<Button type="submit" >Buy SART</Button>
 		</p>
 		</form>
 
 		<form onSubmit={handleSellSubmit}>
 		<p>
-		<label htmlFor="sellpct">PCT to sell:</label>
+		<label htmlFor="sellpct">SART to sell:</label>
 		<input type="number" step="1" min="0" id="sellpct" 
 		name="sellpct" onChange={e => valueChange(e.target.value)} required 
 		style={{margin:'12px'}}/>	

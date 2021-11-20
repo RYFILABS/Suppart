@@ -33,7 +33,7 @@ contract SuppartToken is ERC20 {
     }
     
     mapping(address => AddressFunding[]) AddressProjects;
-    Project[] ProjectTotals;
+    Project[] public ProjectTotals;
     
     address payable owner;
     mapping (address => uint256) pendingWithdrawals;
@@ -44,13 +44,15 @@ contract SuppartToken is ERC20 {
         owner = payable(msg.sender);
     }
 
-    function buyToken(string calldata _projectName, uint256 _amount) external payable {
+    function buyToken(uint256 _amount) external payable {
         
         require(_amount > 0, "Incorrect amount, must be a positive amount.");
         //require(_projectName, "You must provide a project_name");
         
         bool foundproject;
         uint project_index;
+
+        string memory _projectName = "project1";
         
         transferFrom(owner, msg.sender, _amount);
         
@@ -59,7 +61,7 @@ contract SuppartToken is ERC20 {
         if(foundproject) {
             ProjectTotals[project_index].total += _amount;
         } else {
-            createSupportProject(_projectName);
+            createSuppartProject(_projectName);
         }
         
         emit TokenBuyEvent(owner, msg.sender, _amount);
@@ -102,7 +104,7 @@ contract SuppartToken is ERC20 {
         payable(msg.sender).transfer(amount);
     }
     
-    function createSupportProject(string memory _projectName) public returns(bool result, uint id){ 
+    function createSuppartProject(string memory _projectName) public returns(bool result, uint id){ 
         bool foundproject;
         
         (foundproject, ) = getProjectIndex(_projectName);
@@ -126,6 +128,10 @@ contract SuppartToken is ERC20 {
             }
         }
         return (false, 0);
+    }
+
+    function getProjectTotals() public view returns(Project[] memory) {
+        return ProjectTotals;
     }
     
     function mint(address recipient, uint amount) public onlyOwner {

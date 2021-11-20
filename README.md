@@ -60,4 +60,4 @@ The goal of this platform is to empower artists while allowing for them to have 
 
 Artists benefit from having an additional means to fund their projects besides funding it themselves or traditional funding methods with traditional strings attached.
 
-Fans benefit from having a direct connection with the artists that they follow and for the first time in history being able to contribute to their favorite artists' work.
+Fans benefit from having a direct connection with the artists that they follow and for the first time in history being able to directly contribute to their favorite artists' work.
